@@ -1,0 +1,85 @@
+import React, { useState } from "react";
+
+function Shopping() {
+
+  const products = [
+    { id: 1, name: "Laptop", price: 50000 },
+    { id: 2, name: "Mobile", price: 20000 },
+    { id: 3, name: "Headphones", price: 2000 }
+  ];
+
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
+
+  const container = {
+    display: "flex",
+    justifyContent: "center",
+    gap: "40px",
+    marginTop: "30px"
+  };
+
+  const card = {
+    background: "white",
+    padding: "15px",
+    margin: "10px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.2)"
+  };
+
+  const button = {
+    background: "#3498db",
+    color: "white",
+    border: "none",
+    padding: "8px 12px",
+    borderRadius: "5px",
+    cursor: "pointer"
+  };
+
+  const cartBox = {
+    background: "white",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+    minWidth: "200px"
+  };
+
+  return (
+    <div style={container}>
+
+      <div>
+        <h2>Products</h2>
+
+        {products.map((item) => (
+          <div key={item.id} style={card}>
+
+            <h3>{item.name}</h3>
+            <p>Price: ₹{item.price}</p>
+
+            <button style={button} onClick={() => addToCart(item)}>
+              Add to Cart
+            </button>
+
+          </div>
+        ))}
+
+      </div>
+
+      <div style={cartBox}>
+        <h2>Cart</h2>
+
+        <p><b>Total Items:</b> {cart.length}</p>
+
+        {cart.map((item, index) => (
+          <p key={index}>🛍 {item.name}</p>
+        ))}
+
+      </div>
+
+    </div>
+  );
+}
+
+export default Shopping;
