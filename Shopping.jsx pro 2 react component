@@ -83,3 +83,28 @@ function Shopping() {
 }
 
 export default Shopping;
+
+App.jsx :
+
+import React from "react";
+import Shopping from "./Shopping";
+
+function App() {
+
+  const style = {
+    textAlign: "center",
+    fontFamily: "Arial",
+    backgroundColor: "#f4f6f9",
+    minHeight: "100vh",
+    padding: "20px"
+  };
+
+  return (
+    <div style={style}>
+      <h1>🛒 Simple Shopping Cart</h1>
+      <Shopping />
+    </div>
+  );
+}
+
+export default App;
