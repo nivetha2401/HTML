@@ -1,0 +1,114 @@
+app.ts
+
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [FormsModule, RouterOutlet],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App {
+
+  name: string = "";
+  email: string = "";
+  phone: string = "";
+  membership: string = "";
+
+  register() {
+
+    const namePattern = /^[A-Za-z ]+$/;
+    const phonePattern = /^[0-9]{10}$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/;
+
+    if (this.name == "" || this.email == "" || this.phone == "" || this.membership == "") {
+      alert("Please fill all fields");
+      return;
+    }
+
+    if (!namePattern.test(this.name)) {
+      alert("Name should contain only letters");
+      return;
+    }
+
+    if (!emailPattern.test(this.email)) {
+      alert("Email must contain @ and end with .com");
+      return;
+    }
+
+    if (!phonePattern.test(this.phone)) {
+      alert("Phone number must be exactly 10 digits");
+      return;
+    }
+
+    alert("Library Membership Registered Successfully");
+
+  }
+
+}
+
+
+app.html 
+
+<div style="font-family:Arial;background:#f4f6f9;height:100vh;display:flex;justify-content:center;align-items:center;">
+
+  <div style="background:white;padding:30px;width:340px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+
+    <h2 style="text-align:center;">Library Membership Form</h2>
+
+    <form (ngSubmit)="register()">
+
+      <label>Name</label>
+      <input 
+        type="text"
+        [(ngModel)]="name"
+        name="name"
+        placeholder="Enter your name"
+        style="width:100%;padding:8px;margin-top:5px;margin-bottom:15px;border:1px solid #ccc;border-radius:4px;"
+      >
+
+      <label>Email</label>
+      <input 
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        placeholder="Enter your email"
+        style="width:100%;padding:8px;margin-top:5px;margin-bottom:15px;border:1px solid #ccc;border-radius:4px;"
+      >
+
+      <label>Phone Number</label>
+      <input 
+        type="text"
+        [(ngModel)]="phone"
+        name="phone"
+        placeholder="Enter 10 digit phone number"
+        style="width:100%;padding:8px;margin-top:5px;margin-bottom:15px;border:1px solid #ccc;border-radius:4px;"
+      >
+
+      <label>Membership Type</label>
+      <select
+        [(ngModel)]="membership"
+        name="membership"
+        style="width:100%;padding:8px;margin-top:5px;margin-bottom:15px;border:1px solid #ccc;border-radius:4px;"
+      >
+        <option value="">Select Membership</option>
+        <option>Student</option>
+        <option>Faculty</option>
+        <option>Public Member</option>
+      </select>
+
+      <button
+        type="submit"
+        style="width:100%;padding:10px;background:#3498db;color:white;border:none;border-radius:4px;cursor:pointer;"
+      >
+        Register
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
