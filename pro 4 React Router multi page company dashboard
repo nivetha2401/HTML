@@ -1,3 +1,5 @@
+Dashboard.jsx
+
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -133,3 +135,40 @@ function Dashboard({page}) {
 }
 
 export default Dashboard;
+
+App.jsx 
+
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./Dashboard";
+
+function App() {
+
+  const pageStyle = {
+    fontFamily: "Arial",
+    background: "#f4f6f9",
+    minHeight: "100vh"
+  };
+
+  return (
+    <BrowserRouter>
+      <div style={pageStyle}>
+
+        <Routes>
+
+          <Route path="/" element={<Dashboard page="home" />} />
+
+          <Route path="/employees" element={<Dashboard page="employees" />} />
+
+          <Route path="/reports" element={<Dashboard page="reports" />} />
+
+        </Routes>
+
+      </div>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+
