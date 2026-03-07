@@ -73,7 +73,7 @@ function Shopping() {
         <p><b>Total Items:</b> {cart.length}</p>
 
         {cart.map((item, index) => (
-          <p key={index}>🛍 {item.name}</p>
+          <p key={index}> {item.name}</p>
         ))}
 
       </div>
@@ -101,10 +101,11 @@ function App() {
 
   return (
     <div style={style}>
-      <h1>🛒 Simple Shopping Cart</h1>
+      <h1> Simple Shopping Cart</h1>
       <Shopping />
     </div>
   );
 }
 
 export default App;
+
