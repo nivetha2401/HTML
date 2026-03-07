@@ -1,0 +1,153 @@
+Event.jsx
+
+import React, { useState } from "react";
+
+function Event() {
+
+  const [name,setName] = useState("");
+  const [email,setEmail] = useState("");
+  const [phone,setPhone] = useState("");
+  const [eventType,setEventType] = useState("");
+
+  const handleSubmit = (e) => {
+
+    e.preventDefault();
+
+    const namePattern = /^[A-Za-z ]+$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.com$/;
+    const phonePattern = /^[0-9]{10}$/;
+
+    if(name === "" || email === "" || phone === "" || eventType === ""){
+      alert("Please fill all fields");
+      return;
+    }
+
+    if(!namePattern.test(name)){
+      alert("Numbers or special characters are not allowed in name");
+      return;
+    }
+
+    if(!emailPattern.test(email)){
+      alert("Enter a valid email (example: name@gmail.com)");
+      return;
+    }
+
+    if(!phonePattern.test(phone)){
+      alert("Enter valid phone number (10 digits only)");
+      return;
+    }
+
+    alert("Event Registration Successful!");
+
+  };
+
+  const card = {
+    background:"white",
+    padding:"30px",
+    width:"340px",
+    borderRadius:"10px",
+    boxShadow:"0 4px 12px rgba(0,0,0,0.2)"
+  };
+
+  const input = {
+    width:"100%",
+    padding:"8px",
+    marginTop:"5px",
+    marginBottom:"15px",
+    border:"1px solid #ccc",
+    borderRadius:"5px"
+  };
+
+  const button = {
+    width:"100%",
+    padding:"10px",
+    background:"#3498db",
+    color:"white",
+    border:"none",
+    borderRadius:"5px",
+    cursor:"pointer",
+    fontWeight:"bold"
+  };
+
+  return (
+
+    <div style={card}>
+
+      <h2 style={{textAlign:"center"}}>Event Registration</h2>
+
+      <form onSubmit={handleSubmit}>
+
+        <label>Name</label>
+        <input
+          type="text"
+          style={input}
+          value={name}
+          onChange={(e)=>setName(e.target.value)}
+        />
+
+        <label>Email</label>
+        <input
+          type="text"
+          style={input}
+          value={email}
+          onChange={(e)=>setEmail(e.target.value)}
+        />
+
+        <label>Phone Number</label>
+        <input
+          type="text"
+          style={input}
+          value={phone}
+          onChange={(e)=>setPhone(e.target.value)}
+        />
+
+        <label>Select Event</label>
+        <select
+          style={input}
+          value={eventType}
+          onChange={(e)=>setEventType(e.target.value)}
+        >
+          <option value="">Choose Event</option>
+          <option>Workshop</option>
+          <option>Seminar</option>
+          <option>Hackathon</option>
+        </select>
+
+        <button style={button} type="submit">
+          Register
+        </button>
+
+      </form>
+
+    </div>
+
+  );
+}
+
+export default Event;
+
+App.jsx 
+
+import React from "react";
+import Event from "./Event";
+
+function App() {
+
+  const pageStyle = {
+    fontFamily: "Arial",
+    backgroundColor: "#f4f6f9",
+    minHeight: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  };
+
+  return (
+    <div style={pageStyle}>
+      <Event />
+    </div>
+  );
+}
+
+export default App;
+
