@@ -1,0 +1,363 @@
+13 th prog
+
+1) Create new proj folder in file manager as 13th pro
+
+2) install react
+
+3) Open that folder in vs code (ie 13pro)
+
+4) open terminal and give this line in cmd prompt
+
+npm install axios
+
+5) copy paste the App.jsx coding. check there is a coding in main.jsx file
+
+6) then make directory backend give tenis lime vs code and prop
+
+D: 13pro>mkdir backend
+D: 13pro>cd backend 
+D: 13thpro> backend>npm init -y
+
+D: 13thpro> backend>npm install express Cors sqlite3
+
+create a new file in backend and name file as server.js copy paste the server.js code
+
+D:/13pro backend/cd..
+
+D:\13pro>cd myapp
+15)D: 13pro>myyapp>npm install
+
+a) D:\13pro> myapp/npm run dev
+server link will show 
+then give ctrl c
+y
+16) D: 13pro>myyapp>cd..
+17)D: 13pro>cd backend
+18))D: 13pro>backend>node sever.js 
+backend server will show http://localhost:5000/tasks
+then open new terminal cmd prompt
+D: 13pro> cd myyapp
+D:\13pro> myapp/npm run dev
+u will get the server link 
+
+
+app.jsx 
+
+import {useState,useEffect} from "react";
+
+function App(){
+
+const [tasks,setTasks] = useState([]);
+const [task,setTask] = useState("");
+const [priority,setPriority] = useState("");
+const [deadline,setDeadline] = useState("");
+const [editId,setEditId] = useState(null);
+
+useEffect(()=>{
+fetch("http://localhost:5000/tasks")
+.then(res=>res.json())
+.then(data=>setTasks(data));
+},[]);
+
+
+// ADD task
+const addTask = ()=>{
+
+fetch("http://localhost:5000/tasks",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({task,priority,deadline})
+})
+.then(()=>window.location.reload());
+
+};
+
+
+// DELETE task
+const deleteTask = (id)=>{
+
+fetch(`http://localhost:5000/tasks/${id}`,{
+method:"DELETE"
+})
+.then(()=>window.location.reload());
+
+};
+
+
+// EDIT task
+const editTask = (t)=>{
+setTask(t.task);
+setPriority(t.priority);
+setDeadline(t.deadline);
+setEditId(t.id);
+};
+
+
+// UPDATE task
+const updateTask = ()=>{
+
+fetch(`http://localhost:5000/tasks/${editId}`,{
+method:"PUT",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({task,priority,deadline})
+})
+.then(()=>window.location.reload());
+
+};
+
+
+return(
+
+<div>
+
+<style>
+{`
+body{
+background: linear-gradient(135deg,#cfd9ff,#e2ebff);
+font-family: Arial;
+}
+
+.container{
+width:650px;
+margin:auto;
+margin-top:50px;
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0px 4px 10px rgba(0,0,0,0.2);
+text-align:center;
+}
+
+h2{
+color:#333;
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin:6px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+padding:7px 12px;
+margin:5px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+.add{
+background:#4CAF50;
+color:white;
+}
+
+.update{
+background:#2196F3;
+color:white;
+}
+
+.edit{
+background:#ff9800;
+color:white;
+}
+
+.delete{
+background:#f44336;
+color:white;
+}
+
+table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+}
+
+th{
+background:#4CAF50;
+color:white;
+padding:8px;
+}
+
+td{
+padding:8px;
+border:1px solid #ddd;
+}
+`}
+</style>
+
+<div className="container">
+
+<h2>Task Planner</h2>
+
+<input
+placeholder="Task"
+value={task}
+onChange={(e)=>setTask(e.target.value)}
+/>
+
+<input
+placeholder="Priority"
+value={priority}
+onChange={(e)=>setPriority(e.target.value)}
+/>
+
+<input
+placeholder="Deadline"
+value={deadline}
+onChange={(e)=>setDeadline(e.target.value)}
+/>
+
+<br/>
+
+<button className="add" onClick={addTask}>Add</button>
+<button className="update" onClick={updateTask}>Update</button>
+
+<table>
+
+<tr>
+<th>Task</th>
+<th>Priority</th>
+<th>Deadline</th>
+<th>Action</th>
+</tr>
+
+{tasks.map((t)=>(
+
+<tr key={t.id}>
+<td>{t.task}</td>
+<td>{t.priority}</td>
+<td>{t.deadline}</td>
+
+<td>
+<button className="edit" onClick={()=>editTask(t)}>Edit</button>
+<button className="delete" onClick={()=>deleteTask(t.id)}>Delete</button>
+</td>
+
+</tr>
+
+))}
+
+</table>
+
+</div>
+
+</div>
+
+)
+
+}
+
+export default App;
+
+
+server.js
+
+const express = require("express");
+const cors = require("cors");
+const sqlite3 = require("sqlite3").verbose();
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// create database
+const db = new sqlite3.Database("./tasks.db", (err) => {
+  if (err) {
+    console.log(err.message);
+  } else {
+    console.log("Connected to SQLite database");
+  }
+});
+
+// create table
+db.run(`
+CREATE TABLE IF NOT EXISTS tasks(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+task TEXT,
+priority TEXT,
+deadline TEXT
+)
+`);
+
+// GET tasks
+app.get("/tasks", (req, res) => {
+  db.all("SELECT * FROM tasks", (err, rows) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(rows);
+    }
+  });
+});
+
+// ADD task
+app.post("/tasks", (req, res) => {
+
+  const {task, priority, deadline} = req.body;
+
+  db.run(
+    "INSERT INTO tasks (task, priority, deadline) VALUES (?,?,?)",
+    [task, priority, deadline],
+    function(err){
+      if(err){
+        res.send(err);
+      } else{
+        res.json({message:"Task added"});
+      }
+    }
+  );
+
+});
+
+// UPDATE task
+app.put("/tasks/:id", (req,res)=>{
+
+  const {task, priority, deadline} = req.body;
+  const id = req.params.id;
+
+  db.run(
+    "UPDATE tasks SET task=?, priority=?, deadline=? WHERE id=?",
+    [task, priority, deadline, id],
+    function(err){
+      if(err){
+        res.send(err);
+      } else{
+        res.json({message:"Task updated"});
+      }
+    }
+  );
+
+});
+
+// DELETE task
+app.delete("/tasks/:id",(req,res)=>{
+
+  const id = req.params.id;
+
+  db.run(
+    "DELETE FROM tasks WHERE id=?",
+    id,
+    function(err){
+      if(err){
+        res.send(err);
+      } else{
+        res.json({message:"Task deleted"});
+      }
+    }
+  );
+
+});
+
+const PORT = 5000;
+
+app.listen(PORT,()=>{
+console.log(`Server running on port ${PORT}`);
+});
+
+
+
+
+
