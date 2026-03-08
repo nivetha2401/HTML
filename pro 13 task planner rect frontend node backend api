@@ -40,6 +40,10 @@ D: 13pro> cd myyapp
 D:\13pro> myapp/npm run dev
 u will get the server link 
 
+hosting cmd :   render dashboard 
+
+build cmd : $ npm install
+start cmd : $ node server.js
 
 app.jsx 
 
