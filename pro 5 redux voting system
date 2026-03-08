@@ -1,0 +1,156 @@
+App.jsx
+
+import { useDispatch, useSelector } from "react-redux"
+
+function App(){
+
+  const voteA = useSelector(state => state.voteA)
+  const voteB = useSelector(state => state.voteB)
+
+  const dispatch = useDispatch()
+
+  return(
+
+    <div style={{
+      display:"flex",
+      justifyContent:"center",
+      alignItems:"center",
+      height:"100vh",
+      background:"#dbeafe",
+      fontFamily:"Arial"
+    }}>
+
+      <div style={{
+        background:"#f1f5f9",
+        padding:"35px",
+        borderRadius:"10px",
+        width:"340px",
+        textAlign:"center",
+        boxShadow:"0 6px 15px rgba(0,0,0,0.15)"
+      }}>
+
+        <h2 style={{marginBottom:"25px"}}>Online Voting System</h2>
+
+        <div style={{marginBottom:"25px"}}>
+
+          <h3>Candidate A</h3>
+          <p style={{fontSize:"20px", fontWeight:"bold"}}>{voteA} Votes</p>
+
+          <button
+            onClick={()=>dispatch({type:"VOTE_A"})}
+            style={{
+              padding:"8px 18px",
+              background:"#2563eb",
+              color:"white",
+              border:"none",
+              borderRadius:"5px",
+              cursor:"pointer"
+            }}
+          >
+            Vote
+          </button>
+
+        </div>
+
+        <div>
+
+          <h3>Candidate B</h3>
+          <p style={{fontSize:"20px", fontWeight:"bold"}}>{voteB} Votes</p>
+
+          <button
+            onClick={()=>dispatch({type:"VOTE_B"})}
+            style={{
+              padding:"8px 18px",
+              background:"#16a34a",
+              color:"white",
+              border:"none",
+              borderRadius:"5px",
+              cursor:"pointer"
+            }}
+          >
+            Vote
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  )
+}
+
+export default App
+
+
+reducer.jsx 
+
+const initialState = {
+  voteA: 0,
+  voteB: 0
+}
+
+function reducer(state = initialState, action){
+
+  switch(action.type){
+
+    case "VOTE_A":
+      return { ...state, voteA: state.voteA + 1 }
+
+    case "VOTE_B":
+      return { ...state, voteB: state.voteB + 1 }
+
+    default:
+      return state
+  }
+
+}
+
+export default reducer
+
+
+middleware.jsx
+
+const middleware = store => next => action => {
+
+  console.log("Action:", action)
+
+  const result = next(action)
+
+  console.log("State:", store.getState())
+
+  return result
+}
+
+export default middleware
+
+
+store.jsx
+
+import { createStore, applyMiddleware } from "redux"
+import reducer from "./reducer"
+import middleware from "./middleware"
+
+const store = createStore(
+  reducer,
+  applyMiddleware(middleware)
+)
+
+export default store
+
+main.jsx 
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
+import './index.css'
+import App from './App.jsx'
+import store from './store.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>,
+)
